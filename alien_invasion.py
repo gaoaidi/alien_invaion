@@ -17,21 +17,36 @@ class AlienInvasion:
         
         self.ship=Ship(self)
         # 设置背景色
-        self.bg_color=(self.settings.bg_color)
+        self.bg_color=self.settings.bg_color
     def run_game(self):
         """开始游戏的主循环"""
         while True:
-            # 监视键盘和鼠标事件
-            for event in pygame.event.get():
-                if event.type==pygame.QUIT:
-                    sys.exit()
+            self._check_events()
+            self.ship.update()
+            self._update_screen()
 
-            # 每次循环时都重绘屏幕
-            self.screen.fill(self.bg_color)
-            self.ship.blitme()
-
-            # 让最近绘制的屏幕可见
-            pygame.display.update()
+    def _check_events(self):
+        # 监视键盘和鼠标事件
+        for event in pygame.event.get():
+            if event.type==pygame.QUIT:
+                sys.exit()
+            elif event.type==pygame.KEYDOWN:
+                if event.key==pygame.K_RIGHT:
+                    self.ship.moving_right=True
+                if event.key==pygame.K_LEFT:
+                    self.ship.moving_left=True
+            elif event.type==pygame.KEYUP:
+                if event.key==pygame.K_RIGHT:
+                    self.ship.moving_right=False
+                if event.key==pygame.K_LEFT:
+                    self.ship.moving_left=False
+    
+    def _update_screen(self):
+        # 每次循环时都重绘屏幕
+        self.screen.fill(self.bg_color)
+        self.ship.blitme()
+        # 让最近绘制的屏幕可见
+        pygame.display.update()
 
 if __name__=="__main__":
     # 创建游戏实例并运行游戏
