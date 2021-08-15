@@ -29,6 +29,11 @@ class AlienInvasion:
             self.bullets.update()
             self._update_screen()
 
+            for bullet in self.bullets.copy():
+                if bullet.rect.bottom<=0:
+                    self.bullets.remove(bullet)
+            print(len(self.bullets))
+
     def _check_events(self):
         # 监视键盘和鼠标事件
         for event in pygame.event.get():
@@ -57,8 +62,9 @@ class AlienInvasion:
     
     def _fire_bullet(self):
         # 创建一个子弹，并将其加入编组bullets中
-        new_bullet=Bullet(self)
-        self.bullets.add(new_bullet)
+        if len(self.bullets)<=self.settings.bullet_allow:
+            new_bullet=Bullet(self)
+            self.bullets.add(new_bullet)
 
     def _update_screen(self):
         # 每次循环时都重绘屏幕
