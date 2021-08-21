@@ -111,6 +111,7 @@ class AlienInvasion:
         if buttom_clicked and not self.stats.game_active:
             self._start_game()
             self.sb.prep_score()
+            self.sb.prep_level()
 
     def _start_game(self):
         # 重置游戏统计信息
@@ -154,6 +155,9 @@ class AlienInvasion:
             self.bullets.empty()
             self._create_fleet()
             self.settings.increase_speed()
+            # 提高等级
+            self.stats.level+=1
+            self.sb.prep_level()
 
     def _update_aliens(self):
         """更新外星人群中所有外星人的位置"""

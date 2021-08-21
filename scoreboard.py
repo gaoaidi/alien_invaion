@@ -15,11 +15,13 @@ class Scoreboard:
         # 准备最高得分和当前得分的图像
         self.prep_score()
         self.prep_high_score()
+        self.prep_level()
 
     def prep_score(self):
         """将得分转换为一幅渲染的图像"""
         rounded_score=round(self.stats.score,-1)
         score_str="{:,}".format(rounded_score)
+        score_str="Score: "+score_str
         self.score_image=self.font.render(
             score_str,True,self.text_color,self.settings.bg_color)
 
@@ -31,6 +33,7 @@ class Scoreboard:
     def prep_high_score(self):
         high_score=round(self.stats.high_score,-1)
         high_score_str="{:,}".format(high_score)
+        high_score_str="High Score: "+high_score_str
         self.high_score_image=self.font.render(
             high_score_str,True,self.text_color,self.settings.bg_color)
 
@@ -42,9 +45,21 @@ class Scoreboard:
         """在屏幕上显示得分"""
         self.screen.blit(self.score_image,self.score_rect)
         self.screen.blit(self.high_score_image,self.high_score_rect)
+        self.screen.blit(self.level_image,self.level_rect)
     
     def check_high_score(self):
         """检查是否诞生了新的最高得分"""
         if self.stats.score>self.stats.high_score:
             self.stats.high_score=self.stats.score
             self.prep_high_score()
+
+    def prep_level(self):
+        """将等级转换为渲染的图像"""
+        level_str=str(self.stats.level)
+        level_str="Level: "+level_str
+        self.level_image=self.font.render(
+            level_str,True,self.text_color,self.settings.bg_color)
+        # 将等级放在得分下面
+        self.level_rect=self.level_image.get_rect()
+        self.level_rect.right=self.score_rect.right
+        self.level_rect.top=self.score_rect.bottom+10
