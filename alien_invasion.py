@@ -112,6 +112,7 @@ class AlienInvasion:
             self._start_game()
             self.sb.prep_score()
             self.sb.prep_level()
+            self.sb.prep_ships()
 
     def _start_game(self):
         # 重置游戏统计信息
@@ -182,6 +183,7 @@ class AlienInvasion:
         if self.stats.ship_left>0:
             """响应飞船被外星人撞到"""
             self.stats.ship_left-=1
+            self.sb.prep_ships()
 
             self.aliens.empty()
             self.bullets.empty()
