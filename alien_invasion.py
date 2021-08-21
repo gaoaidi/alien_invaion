@@ -18,9 +18,11 @@ class AlienInvasion:
         pygame.init()
         self.settings=Settings()
         # 创建屏幕
-        self.screen=pygame.display.set_mode((0,0),pygame.FULLSCREEN)
-        self.settings.screen_height=self.screen.get_rect().height
-        self.settings.screen_width=self.screen.get_rect().width
+        # self.screen=pygame.display.set_mode((0,0),pygame.FULLSCREEN)
+        # self.settings.screen_height=self.screen.get_rect().height
+        # self.settings.screen_width=self.screen.get_rect().width
+        self.screen=pygame.display.set_mode(
+            (self.settings.screen_width,self.settings.screen_height))
         pygame.display.set_caption("Alien Invasion")
         # 创建一个用于存储游戏统计信息的实例
         self.stats=GameStats(self)
@@ -33,6 +35,7 @@ class AlienInvasion:
         self.play_buttom=Buttom(self,"Play")
         # 设置背景色
         self.bg_color=self.settings.bg_color
+
     def run_game(self):
         """开始游戏的主循环"""
         while True:
@@ -91,6 +94,8 @@ class AlienInvasion:
             self._fire_bullet()
         if event.key==pygame.K_q:
             sys.exit()
+        if event.key==pygame.K_p:
+            self._start_game()
 
     def _check_keyup_events(self, event):
         if event.key==pygame.K_RIGHT:
@@ -102,17 +107,20 @@ class AlienInvasion:
         """在玩家点击play按钮时开始新游戏"""
         buttom_clicked=self.play_buttom.rect.collidepoint(mouse_pos)
         if buttom_clicked and not self.stats.game_active:
-            # 重置游戏统计信息
-            self.stats.reset_stats()
-            self.stats.game_active=True
+            self._start_game()
+
+    def _start_game(self):
+        # 重置游戏统计信息
+        self.stats.reset_stats()
+        self.stats.game_active=True
             # 清空余下的外星人和子弹
-            self.aliens.empty()
-            self.bullets.empty()
+        self.aliens.empty()
+        self.bullets.empty()
             # 创建一群新的外星人并让飞船居中
-            self._create_fleet()
-            self.ship.center_ship()
+        self._create_fleet()
+        self.ship.center_ship()
             # 隐藏光标
-            pygame.mouse.set_visible(False)
+        pygame.mouse.set_visible(False)
 
     def _fire_bullet(self):
         # 创建一个子弹，并将其加入编组bullets中
@@ -173,6 +181,7 @@ class AlienInvasion:
         else:
             self.stats.game_active=False
             pygame.mouse.set_visible(True)
+
     def _check_fleet_edges(self):
         """有外星人到达边缘时采取相应的措施"""
         for alien in self.aliens.sprites():
